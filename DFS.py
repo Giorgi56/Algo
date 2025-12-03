@@ -7,14 +7,14 @@ class Pile:
     def push(self, elt):
         self.pile.append(elt)
     
-    def _pop(self):
+    def pop(self):
         return self.pile.pop()
     
     def not_empty(self):
         return len(self.pile) > 0
     
-# Type NonOrientedGraph - liste d'adjascence - sommet = entier entre 0 et n-1 où n est le nombre d'arrêtes
-class NonOrientedGraph:
+# Type OrientedGraph - liste d'adjascence - sommet = entier entre 0 et n-1 où n est le nombre d'arrêtes
+class OrientedGraph:
     def __init__(self, adj:list[list[int]]):
         self.adj = adj
     
@@ -30,7 +30,7 @@ class NonOrientedGraph:
 
 # fonction de dfs
 
-def dfs(graph:NonOrientedGraph, start:int):
+def dfs(graph:OrientedGraph, start:int):
     """Makes a depth-first search and prints every node as soon as visited"""
     pile = Pile([start])
 
@@ -38,23 +38,41 @@ def dfs(graph:NonOrientedGraph, start:int):
     n = len(graph.adj)
     visited = [False] * n
 
-    print(start)
-    while pile.not_empty():
-        a = pile._pop()
-        visited[a] = True
-        for neighbor in graph.neighbors(a):
+    def aux(s):
+        print(s)
+        visited[s] = True
+        for neighbor in graph.neighbors(s):
             if not visited[neighbor]:
-                print(neighbor)
-                pile.push(neighbor)
+                aux(neighbor)
+    
+    def aux2():
+        """Inutile non?"""
+        if pile.not_empty():
+            s = pile.pop()
+            print(s)
+            visited[s] = True
+            for neighbor in graph.neighbors(s):
+                if not visited[neighbor]:
+                    pile.push(neighbor)
+                    aux2()
+    aux(start)
+    visited = [False] * n
+    print("--------------------")
+    aux2()
 
 # Test
-graph = NonOrientedGraph([
-    [1, 2],
+graph = OrientedGraph([
+    [1, 2, 7],
+    [ 6],
     [3, 5],
-    [],
-    [],
+    [8],
     [],
     [4],
+    [9, 10],
+    [],
+    [],
+    [],
+    [],
 ])
 
 dfs(graph, 0)

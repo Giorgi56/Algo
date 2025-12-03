@@ -13,8 +13,8 @@ class File:
     def not_empty(self):
         return len(self.file) > 0
     
-# Type NonOrientedGraphe - liste d'adjascence - sommet = entier entre 0 et n-1 où n est le nombre d'arrêtes
-class NonOrientedGraph:
+# Type OrientedGraphe - liste d'adjascence - sommet = entier entre 0 et n-1 où n est le nombre d'arrêtes
+class OrientedGraph:
     def __init__(self, adj:list[list[int]]):
         self.adj = adj
     
@@ -30,7 +30,7 @@ class NonOrientedGraph:
 
 # fonction de dfs
 
-def bfs(graph:NonOrientedGraph, start:int):
+def bfs(graph:OrientedGraph, start:int):
     """Makes a depth-first search and prints every node as soon as visited"""
     file = File([start])
 
@@ -48,13 +48,18 @@ def bfs(graph:NonOrientedGraph, start:int):
                 file.enqueue(neighbor)
 
 # Test
-graph = NonOrientedGraph([
-    [1, 2],
+graph = OrientedGraph([
+    [1, 2, 7],
+    [ 6],
     [3, 5],
-    [],
-    [],
+    [8],
     [],
     [4],
+    [9, 10],
+    [],
+    [],
+    [],
+    [],
 ])
 
 bfs(graph, 0)
