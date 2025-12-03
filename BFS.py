@@ -1,16 +1,17 @@
-# Type Pile
-class Pile:
+# Type File
+class File:
+    """FIFO"""
     def __init__(self, lst):
-        self.pile = lst
+        self.file = lst
     
-    def push(self, elt):
-        self.pile = [elt] + self.pile
+    def enqueue(self, elt):
+        self.file = [elt] + self.file
     
-    def pop(self):
-        return self.pile.pop()
+    def dequeue(self):
+        return self.file.pop()
     
     def not_empty(self):
-        return len(self.pile) > 0
+        return len(self.file) > 0
     
 # Type NonOrientedGraphe - liste d'adjascence - sommet = entier entre 0 et n-1 où n est le nombre d'arrêtes
 class NonOrientedGraph:
@@ -29,22 +30,22 @@ class NonOrientedGraph:
 
 # fonction de dfs
 
-def dfs(graph:NonOrientedGraph, start:int):
+def bfs(graph:NonOrientedGraph, start:int):
     """Makes a depth-first search and prints every node as soon as visited"""
-    pile = Pile([start])
+    file = File([start])
 
     # Construction of the visited nodes' list
     n = len(graph.adj)
     visited = [False] * n
 
     print(start)
-    while pile.not_empty():
-        a = pile.pop()
-        if not visited[a]:
-            visited[a] = True
-            for neighbor in graph.neighbors(a):
+    while file.not_empty():
+        a = file.dequeue()
+        visited[a] = True
+        for neighbor in graph.neighbors(a):
+            if not visited[neighbor]:
                 print(neighbor)
-                pile.push(neighbor)
+                file.enqueue(neighbor)
 
 # Test
 graph = NonOrientedGraph([
@@ -56,4 +57,4 @@ graph = NonOrientedGraph([
     [4],
 ])
 
-dfs(graph, 0)
+bfs(graph, 0)

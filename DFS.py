@@ -1,18 +1,19 @@
 # Type Pile
 class Pile:
-    def __init__(self, lst):
+    """LIFO"""
+    def __init__(self, lst:list):
         self.pile = lst
     
     def push(self, elt):
-        self.pile = [elt] + self.pile
+        self.pile.append(elt)
     
-    def pop(self):
+    def _pop(self):
         return self.pile.pop()
     
     def not_empty(self):
         return len(self.pile) > 0
     
-# Type NonOrientedGraphe - liste d'adjascence - sommet = entier entre 0 et n-1 où n est le nombre d'arrêtes
+# Type NonOrientedGraph - liste d'adjascence - sommet = entier entre 0 et n-1 où n est le nombre d'arrêtes
 class NonOrientedGraph:
     def __init__(self, adj:list[list[int]]):
         self.adj = adj
@@ -39,10 +40,10 @@ def dfs(graph:NonOrientedGraph, start:int):
 
     print(start)
     while pile.not_empty():
-        a = pile.pop()
-        if not visited[a]:
-            visited[a] = True
-            for neighbor in graph.neighbors(a):
+        a = pile._pop()
+        visited[a] = True
+        for neighbor in graph.neighbors(a):
+            if not visited[neighbor]:
                 print(neighbor)
                 pile.push(neighbor)
 
