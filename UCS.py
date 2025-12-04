@@ -12,7 +12,7 @@ def dijkstra(graph: WeightedNonOrientedGraph, starting_node: int, target_node):
     def select_c():
         """Selects the node with the minimal distance to s amongst the unvisited set"""
         print(dists)
-        if (visited != [True] * n) and (not b):  # We have not reached the target nor visited every node
+        if visited != [True] * n:  # (We have not yet reached the target) nor visited every node
 
             min_dist, indx = float('infinity'), -1
             for i in range(graph.n):
