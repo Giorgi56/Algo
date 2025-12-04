@@ -22,7 +22,7 @@ def bfs(graph:OrientedGraph, start:int):
     file = File([start])
 
     # Construction of the visited nodes' list
-    n = len(graph.adj)
+    n = graph.n
     visited = [False] * n
 
     print(start)

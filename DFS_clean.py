@@ -6,7 +6,7 @@ def dfs(graph:OrientedGraph, start:int):
     """Makes a depth-first search and prints every node as soon as visited"""
 
     # Construction of the visited nodes' list
-    n = len(graph.adj)
+    n = graph.n
     visited = [False] * n
 
     def aux(s):

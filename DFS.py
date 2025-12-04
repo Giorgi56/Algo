@@ -22,7 +22,7 @@ def dfs(graph:OrientedGraph, start:int):
     pile = Pile([start])
 
     # Construction of the visited nodes' list
-    n = len(graph.adj)
+    n = graph.n
     visited = [False] * n
 
     def aux(s):
