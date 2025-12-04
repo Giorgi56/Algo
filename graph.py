@@ -4,6 +4,7 @@
 class OrientedGraph:
     def __init__(self, adj:list[list[int]]):
         self.adj = adj
+        self.n = len(adj)
     
     def neighbors(self, s:int):
         return self.adj[s]  # adjascence list of the node with index of s
@@ -14,3 +15,23 @@ class OrientedGraph:
             self.adj.append(neighbors)
         else:
             self.adj[node] = self.adj[node] + neighbors
+    
+    def adj_matrix(self):
+        mat = [[0 for _ in range(self.n)] for _ in range(self.n)]
+        for i, line in enumerate(self.adj):
+            for j in range(len(line)):
+                mat[i][j] = line[j]
+
+        return mat
+
+class NonOrientedGraph(OrientedGraph):
+    def __init__(self, adj:list[list[int]]):
+        self.adj = adj
+
+        # Creating a symmetrical adjascence list
+        for node in range(len(adj)):
+            neighbors = adj[node]
+            for neighbor in neighbors:
+                self.adj[neighbor].append(node)
+        
+        self.mat = self.adj_matrix()
