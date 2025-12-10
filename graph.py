@@ -9,14 +9,7 @@ class OrientedGraph:
     
     def neighbors(self, s:int):
         return self.adj[s]  # adjascence list of the node with index of s
-    
-    def add(self, node:int, neighbors:list):
-        if node == len(self.adj) + 1:
-            # i.e. if we're creating a new node
-            self.adj.append(neighbors)
-        else:
-            self.adj[node] = self.adj[node] + neighbors
-    
+
     def adj_matrix(self, weighted=False):
         if weighted:
             # The inexistent arcs are marked with an infinite distance=
@@ -40,15 +33,27 @@ class NonOrientedGraph(OrientedGraph):
         temp_adj = deepcopy(adj)
         self.n = len(adj)
 
-        print("before sym adjascence list: ", self.adj)
         # Creating a symmetrical adjascence list
         for node in range(len(temp_adj)):
             neighbors = temp_adj[node]
             for neighbor in neighbors:
                 self.adj[neighbor].append(node)
-        print("sym adjascence list: ", self.adj)
         
         self.mat = self.adj_matrix(weighted = weighted)
+    
+    def add(self, arc:tuple):
+        """adds the (u, v) arc"""
+        (u, v) = arc
+        self.adj[u].append(v)
+        self.adj[v].append(u)
+        self.mat[u][v], self.mat[u][v] = 1, 1
+    
+    def remove(self, arc:tuple):
+        """adds the (u, v) arc"""
+        (u, v) = arc
+        self.adj[u].remove(v)
+        self.adj[v].remove(u)
+        self.mat[u][v], self.mat[u][v] = 0, 0
 
 class WeightedNonOrientedGraph(NonOrientedGraph):
     def __init__(self, adj:list[list[tuple[int, int]]]):
@@ -60,6 +65,22 @@ class WeightedNonOrientedGraph(NonOrientedGraph):
             for arc in line:
                 (v, w) = arc
                 self.mat[u][v], self.mat[v][u] = w, w
+    
+    def arcs(self):
+        """
+        returns a list of the graph's arcs with no redundancies, and sorted by weight.
+        Format:
+            list of [...(w, (u, v))...] where:
+                (u, v) if an arc
+                w is (u, v)'s weight
+        """
+        arcs = []
+        for i in range(self.n):
+            for j in range(i + 1, self.n):  # j > i leaves us in the top triangle of the mat
+                arcs.append((self.mat[i][j], (i, j)))
+
+        return sorted(arcs)
+    
 
 test_graph = WeightedNonOrientedGraph([
     [(1, 1), (2, 2), (3, 3)],
