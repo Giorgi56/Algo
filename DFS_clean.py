@@ -1,5 +1,5 @@
 """Version propre de DFS.py"""
-from graph import OrientedGraph, WeightedNonOrientedGraph
+from graph import OrientedGraph, WeightedNonOrientedGraph, NonOrientedGraph
 
 # fonction de dfs
 def dfs(graph: OrientedGraph, start: int):
@@ -18,7 +18,7 @@ def dfs(graph: OrientedGraph, start: int):
 
     aux(start)
 
-def cyclique(graph:WeightedNonOrientedGraph):
+def cyclique(graph:NonOrientedGraph):
     n = graph.n
 
     def aux(s:int, start:int, parent):
