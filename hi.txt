@@ -1,6 +1,0 @@
-Hello
-Hello World!
-
-Change I made hastily on my main branch.
-
-This is a change made by someone else that I want to keep.
