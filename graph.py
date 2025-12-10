@@ -46,14 +46,14 @@ class NonOrientedGraph(OrientedGraph):
         (u, v) = arc
         self.adj[u].append(v)
         self.adj[v].append(u)
-        self.mat[u][v], self.mat[u][v] = 1, 1
+        self.mat[u][v], self.mat[v][u] = 1, 1
     
     def remove(self, arc:tuple):
         """adds the (u, v) arc"""
         (u, v) = arc
         self.adj[u].remove(v)
         self.adj[v].remove(u)
-        self.mat[u][v], self.mat[u][v] = 0, 0
+        self.mat[u][v], self.mat[v][u] = 0, 0
 
 class WeightedNonOrientedGraph(NonOrientedGraph):
     def __init__(self, adj:list[list[tuple[int, int]]]):
