@@ -17,28 +17,3 @@ def kruskal(graph:WeightedNonOrientedGraph):
             print(T.mat)
     
     return T.mat
-
-
-test_graph = WeightedNonOrientedGraph([
-    [(1, 1)],
-    [(2, 1)],
-    [(3, 1)],
-    [(0, 1)]
-])
-print(kruskal(test_graph))
-
-test_graph2 = WeightedNonOrientedGraph([
-    [(1, 1)],
-    [(2, 1)],
-    [(3, 1)],
-    [(0, 0)]
-])
-print(kruskal(test_graph2))
-
-test_graph3 = WeightedNonOrientedGraph([
-    [(1, 1)],
-    [(2, 0), (3, -1)],
-    [(3, 1)],
-    [(0, 1)]
-])
-print(kruskal(test_graph3))
