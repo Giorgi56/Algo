@@ -32,22 +32,25 @@ def cyclique(graph:WeightedNonOrientedGraph):
                 return False
 
         global visited
-        neighbors = []
+        neighbors = [] # List of all neighbors we will visit
 
         visited[s] = True
 
         for neighbor in graph.neighbors(s):
-            if neighbor == start and (parent != start):
+            if neighbor == start and (parent != start):  # If we arrived back to start (without start being the parent node)
                 return True
             elif not visited[neighbor]:
                 neighbors.append(neighbor)
+        
+        # Unless we're at a dead end, repeat aux with all the neighbors
         if  len(neighbors) == 0:  # A dead end is when no more neighbors are unvisited
             return False
         else:
             return aux2(neighbors, start, s)
 
-    b = False
+    b = False  # b = (a cycle has been found)
     for i in range(n):
+        # do we come back to i by DFS?
         global visited
         visited = [False] * n
         b = b or aux(i, i, i)
