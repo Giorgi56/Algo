@@ -1,4 +1,5 @@
 """Definition of graph objects and properties"""
+from copy import deepcopy
 
 # Type OrientedGraph - liste d'adjascence - sommet = entier entre 0 et n-1 où n est le nombre d'arrêtes
 class OrientedGraph:
@@ -22,7 +23,7 @@ class OrientedGraph:
             mat = [[float('infinity') for _ in range(self.n)] for _ in range(self.n)]
             for i in range(self.n):
                 mat[i][i] = 0  # The diagonal is null
-                return mat     # mat will be completed in 
+            return mat     # mat will be completed in 
         else:
             # Return a matrix with 1 if the (i, j) arc exists and 0 if not
             mat = [[0 for _ in range(self.n)] for _ in range(self.n)]
@@ -36,13 +37,16 @@ class OrientedGraph:
 class NonOrientedGraph(OrientedGraph):
     def __init__(self, adj:list[list[int]], weighted=False):
         self.adj = adj
+        temp_adj = deepcopy(adj)
         self.n = len(adj)
 
+        print("before sym adjascence list: ", self.adj)
         # Creating a symmetrical adjascence list
-        for node in range(len(adj)):
-            neighbors = adj[node]
+        for node in range(len(temp_adj)):
+            neighbors = temp_adj[node]
             for neighbor in neighbors:
                 self.adj[neighbor].append(node)
+        print("sym adjascence list: ", self.adj)
         
         self.mat = self.adj_matrix(weighted = weighted)
 
