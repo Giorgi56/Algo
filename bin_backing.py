@@ -25,10 +25,8 @@ def partition(lst:list, partitioning:list, m:int):
     parts = []
     for i in range(m):
         part = []  # part (or bin) number i
-        print(f"bin number {i} if being filled")
         for j in range(n):
             if partitioning[j] == i:
-                print("\tadding ", lst[j])
                 part.append(lst[j])
         parts.append(part)
     return parts
