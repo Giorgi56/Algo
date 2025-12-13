@@ -31,6 +31,12 @@ def partition(lst:list, partitioning:list, m:int):
         parts.append(part)
     return parts
 
+def print_indexes(lst, indx):
+    ret = []
+    for i in indx:
+        ret.append(lst[i])
+    print(ret)
+
 def binpacking(B:int, E:list):
     """
     Given 
@@ -40,53 +46,51 @@ def binpacking(B:int, E:list):
     the function returns the lists of elements of E representing each a pack.
     """
     E.sort(reverse=True)
-    print(E)
     n = len(E)
 
-    taken_empty = [False for _ in range(n)]
-    def aux(i=0, bin_weight=0):
+    def aux(i=0, bin_weight=0, path=[]):
         """Fills the bin number 'bin_number' """
         global taken
 
+        if path:
+            print_indexes(E, path)
+
         # print(f"\naux called for bin_number = {bin_number}, bin_weight = {bin_weight}")
         if i >= n:
-            return bin_weight
+            return bin_weight, path
         elif taken[i]:
-            return aux(i + 1, bin_weight)
+            return aux(i + 1, bin_weight, path)
         elif bin_weight + E[i] > B:
-            print(f"bin weight: {bin_weight}, E[i] = {E[i]}")
-            print("\t\t\tWEIGHT EXCEEDING")
-            return aux(i + 1, bin_weight)
+            return aux(i + 1, bin_weight, path)
         else:
             # weight of the bin if we take i
-            print("considering ", E[i])
-            print("taken: ", taken)
-            w_taken = aux(i + 1, bin_weight + E[i])
+            w_taken = aux(i + 1, bin_weight + E[i], path + [i])[0]
 
             # weight of the bin if we do not take i
-            w_not = aux(i + 1, bin_weight)
+            w_not = aux(i + 1, bin_weight)[0]
             
-            if w_taken <= B and ((w_not < w_taken) or (B < w_not)):
-                # We chose to take E[i] in the new bin
-                if w_taken == B:
-                    w_taken
+            if (w_not < w_taken) or (B < w_not):
+            # Then we chose to take E[i] in the new bin:
                 taken[i] = bin_number
-                return w_taken
+                return w_taken, path
             else:
-                return aux(i + 1, bin_weight)
+                return aux(i + 1, bin_weight, path)
     
-    m = 0  # total number of bins
-    bin_number = 0
+    m = 0           # total number of bins
+    bin_number = 0  # current working bin
+
+    # taken list
+    taken_empty = [False for _ in range(n)]
     global taken
     taken = deepcopy(taken_empty)
+
+    ret = []
     for i in range(n):
         if not taken[i]:
+            print("STARTING A NEW BIN")
             m += 1
             bin_number += 1
-            print("creating bin number ", bin_number)
-            weight = aux(i)
-    
-    return partition(E, taken, m)
+            hi = aux(i)
+    # return partition(E, taken, m)
 
-if __name__ == '__main__':
-    print(binpacking(10, [4, 4, 5, 5, 5, 4, 4, 6, 6, 2, 2, 3, 3, 7, 7, 2, 2, 5, 5, 8, 8, 4, 4, 5]))
+binpacking(10, [4, 4, 5, 5, 5, 4, 4, 6, 6, 2, 2, 3, 3, 7, 7, 2, 2, 5, 5, 8, 8, 4, 4, 5])
