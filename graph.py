@@ -82,6 +82,15 @@ class WeightedNonOrientedGraph(NonOrientedGraph):
         return sorted(arcs)
     
 
+class WeightedOrientedGraph:
+    def __init__(self, n:int, weight:dict):
+        """
+        n: the vertice set is {0, ..., n-1}
+        weight: edge (u, v) -> weight(u, v) of the edge if the edge exists
+        """
+        self.n = n
+        self.weight = weight
+
 test_graph = WeightedNonOrientedGraph([
     [(1, 1), (2, 2), (3, 3)],
     [(4, 5), (5, 2)],
