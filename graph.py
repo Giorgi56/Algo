@@ -83,15 +83,21 @@ class WeightedNonOrientedGraph(NonOrientedGraph):
     
 
 class WeightedOrientedGraph:
-    def __init__(self, n:int, weight:dict, flow:dict = {}):
+    def __init__(self, n:int, weight:dict):
         """
         n: the vertice set is {0, ..., n-1}
         weight: edge (u, v) -> weight(u, v) of the edge if the edge exists
-        flow: same structure as weight
         """
         self.n = n
         self.weight = weight
-        self.f = flow
+
+        # f is the flow. It has the same structure as self.weight
+        # It is automatically made symmetric by a method below!
+        # In the Ford-Fulkerson algorithm the initial flow is null
+        self.f = {edge:0 for edge in weight.keys()}
+        self.make_f_symmetric()
+        
+        # Adjascence list
         self.make_adj_list()
 
     def make_adj_list(self) -> None:
@@ -101,9 +107,20 @@ class WeightedOrientedGraph:
             (u, v) = arc
             self.adj[u].append(v)
     
+    def make_f_symmetric(self):
+        """Makes f symmetric, letting us create the flow more easily"""
+        for edge, w in self.f.keys():
+            (u, v) = edge
+            self.f[(v, u)] = -w
+    
     def check_f_is_flow(self, s, t) -> bool:
         """Checks that the weight function is indeed a flow verifying Ford-Fulkerson method hypotheses"""
         b = True
+
+        # Skew symmetry (testing make_f_symmetric)
+        for edge, w in self.f.items():
+            (u, v) = edge
+            b == (w == -self.f[(v, u)])
 
         # Check that the flow doesn't exceed the capacity
         for edge, w in self.weight.items():
@@ -114,17 +131,32 @@ class WeightedOrientedGraph:
             if (v, s) in self.f.keys() or (t, v) in self.f.keys():
                 b = False
         
-        # Check that for every vertice v, the flow going in equals the flow coming out
+        # Check the flow conservation;
+        # Also check that the flow going out of s is the flow going in t
+        going_out_s, going_in_t = 0, 0
         for v in range(self.n):
-            going_in, going_out = 0, 0
-            for edge, w in self.f.items():
-                (a, b) = edge
-                if a == v:
-                    going_out += w
-                elif b == v:
-                    going_in += w
-            b = b and (going_in == going_out)
+            if v not in (s, t):
+                # Then the flow going in should equal the flow coming out
+                going_in, going_out = 0, 0
+                for edge, w in self.f.items():
+                    (a, b) = edge
+                    if a == v:
+                        going_out += w
+                    elif b == v:
+                        going_in += w
+                b = b and (going_in == going_out)
+            
+            # Check that the flow going out of s is the flow going in t
+            elif v == s:
+                for edge, w in self.weight.items():
+                    (a, b) = edge
+                    if a == s:
+                        going_out_s += w
+                    elif b == t:
+                        going_in_t += w
         
+        b = b and (going_out_s == going_in_t)
+
         return b
 
 test_graph = WeightedNonOrientedGraph([
