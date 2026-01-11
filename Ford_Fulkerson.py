@@ -47,6 +47,7 @@ def augment_path(graph:WeightedOrientedGraph, p:list[int]) -> None:
     for i in range(len(p) - 1):  # p contains at least s and t so len(p) >= 2
         u, v = p[i], p[i + 1]
         graph.f[(u, v)] += m
+        graph.f[(v, u)] -= m
 
 def ford_fulkerson(graph:WeightedOrientedGraph, s, t):
 
