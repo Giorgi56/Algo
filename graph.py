@@ -83,13 +83,15 @@ class WeightedNonOrientedGraph(NonOrientedGraph):
     
 
 class WeightedOrientedGraph:
-    def __init__(self, n:int, weight:dict):
+    def __init__(self, n:int, weight:dict, flow:dict = {}):
         """
         n: the vertice set is {0, ..., n-1}
         weight: edge (u, v) -> weight(u, v) of the edge if the edge exists
+        flow: same structure as weight
         """
         self.n = n
         self.weight = weight
+        self.f = flow
         self.make_adj_list()
 
     def make_adj_list(self) -> None:
@@ -99,19 +101,23 @@ class WeightedOrientedGraph:
             (u, v) = arc
             self.adj[u].append(v)
     
-    def check_weight_is_flow(self, s, t) -> bool:
+    def check_f_is_flow(self, s, t) -> bool:
         """Checks that the weight function is indeed a flow verifying Ford-Fulkerson method hypotheses"""
         b = True
+
+        # Check that the flow doesn't exceed the capacity
+        for edge, w in self.weight.items():
+            b = b and (self.f[edge] <= weight)
         
         # Check that the flow only goes out of s and in t
         for v in range(self.n):
-            if (v, s) in self.weight.keys() or (t, v) in self.weight.keys():
+            if (v, s) in self.f.keys() or (t, v) in self.f.keys():
                 b = False
         
-        # Check that for every vertice v, the flow going in equals the flow going out
+        # Check that for every vertice v, the flow going in equals the flow coming out
         for v in range(self.n):
             going_in, going_out = 0, 0
-            for edge, w in self.weight.items():
+            for edge, w in self.f.items():
                 (a, b) = edge
                 if a == v:
                     going_out += w
