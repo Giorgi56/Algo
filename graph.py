@@ -90,6 +90,36 @@ class WeightedOrientedGraph:
         """
         self.n = n
         self.weight = weight
+        self.make_adj_list()
+
+    def make_adj_list(self) -> None:
+        """Make an adjascence list out of the weight function"""
+        self.adj = [[] for _ in range(self.n)]
+        for arc in self.weight.keys():
+            (u, v) = arc
+            self.adj[u].append(v)
+    
+    def check_weight_is_flow(self, s, t) -> bool:
+        """Checks that the weight function is indeed a flow verifying Ford-Fulkerson method hypotheses"""
+        b = True
+        
+        # Check that the flow only goes out of s and in t
+        for v in range(self.n):
+            if (v, s) in self.weight.keys() or (t, v) in self.weight.keys():
+                b = False
+        
+        # Check that for every vertice v, the flow going in equals the flow going out
+        for v in range(self.n):
+            going_in, going_out = 0, 0
+            for edge, w in self.weight.items():
+                (a, b) = edge
+                if a == v:
+                    going_out += w
+                elif b == v:
+                    going_in += w
+            b = b and (going_in == going_out)
+        
+        return b
 
 test_graph = WeightedNonOrientedGraph([
     [(1, 1), (2, 2), (3, 3)],
